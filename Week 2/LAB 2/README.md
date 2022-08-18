@@ -39,6 +39,8 @@ aws ec2 create-route --route-table-id rtb-0c01864b40e27889a --destination-cidr-b
 I then associated route-table to one of my subnet to make the subnet public using the code input
 aws ec2 associate-route-table  --subnet-id subnet-0dc4f392808b35e6d --route-table-id rtb-0c01864b40e27889a
 
+![ASSOCIATE RT](Images/Associate%20RT.jpg)
+
 I then modified the public IP addressing behavior of the subnet so that an instance launched into the subnet automatically receives a public IP address using the code input
 aws ec2 modify-subnet-attribute --subnet-id subnet-0dc4f392808b35e6d --map-public-ip-on-launch
 
@@ -48,18 +50,29 @@ aws ec2 create-security-group --group-name SSHAccess --description "Security gro
 and
 aws ec2 authorize-security-group-ingress --group-id sg-0a2687d28166b4917 --protocol tcp --port 22 --cidr 0.0.0.0/0
 
+1[SG](Images/Security%20group.jpg)
+![SSH AUTO](Images/SSH%20authorization.jpg)
+
 6. Lauch an instance into your subnet 
 I lauched an instance using the code input
 aws ec2 run-instances --image-id ami-0cabc39acf991f4f1 --count 1 --instance-type t2.micro --key-name jesmykel --security-group-ids sg-0a2687d28166b4917 --subnet-id subnet-0dc4f392808b35e6d
 
+![LAUNCH INSTANCE](Images/create%20instance.jpg)
+
 I checked the state of the instance using the code input
 aws ec2 describe-instances --instance-id i-009c455919740e8b9 --query "Reservations[*].Instances[*].{State:State.Name,Address:PublicIpAddress}"
 
+![INSTANCE STATE](Images/instance%20state.jpg)
+
 I connected the instance from the managemant console using the EC2 instance connect and i was granted access.
+
+![INSTANCE CONNECT](Images/instance%20connect.jpg)
 
 7. Clean Up
 I performed clean up operation by 
 terminating the instance, deleting the SG, deleting the subnets, deleting route table, detaching the IGW from VPC, deleting the IGW, deleting VPC
+
+![CLEAN UP](Images/clean%20up.jpg)
 
 
 
