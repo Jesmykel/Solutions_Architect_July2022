@@ -7,11 +7,17 @@ I opened my CLI from the management console after logging in to my AWS account
 I lauched a VPC using the code input
 aws ec2 create-vpc --cidr-block 10.0.0.0/16 --query Vpc.VpcId --output text 
 
+![create VPC](Images/create%20vpc.jpg)
+
 3. Create two subnets (a public and a private subnet)
 I created two subnets using the code input
 aws ec2 create-subnet --vpc-id vpc-061c9afd702448dcf --cidr-block 10.0.1.0/24
 and
 aws ec2 create-subnet --vpc-id vpc-061c9afd702448dcf --cidr-block 10.0.1.0/24
+
+![CREATE SUBNET](Images/subnet%201.jpg)
+![CREATE SUBNET](Images/subnet%202.jpg)
+
 
 4. Make your subnet public by creating and attaching an internet gateway
 To make one of my subnet public;
@@ -21,6 +27,8 @@ aws ec2 create-internet-gateway --query InternetGateway.InternetGatewayId --outp
 
 I attached the gateway to a VPC using the code input
 aws ec2 attach-internet-gateway --vpc-id vpc-061c9afd702448dcf --internet-gateway-id igw-0588e4224e585d120
+
+![ATTACH GATEWAY](Images/Attach%20gateway.jpg)
 
 I created a route-table in my VPC using the code input
 aws ec2 create-route-table --vpc-id vpc-061c9afd702448dcf --query RouteTable.RouteTableId --output text
