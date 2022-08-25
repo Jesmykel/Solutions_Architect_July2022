@@ -25,7 +25,7 @@ user3     EC2 admin       Full access to Amazon EC2 instances
 I then created 3 IAM user using the IAM service; user1, user2, user3 then added a permission of the group created above. 
 
 6. Test your design
-I tested the by logging into each of the IAM user
+I tested the design by logging into each of the IAM user created
 
 7. Perform clean up operations
 I deleted the users and adjusted the group permission for the next tasks
