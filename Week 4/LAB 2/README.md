@@ -14,6 +14,8 @@ I didn't set the encryption status for the volume.
 I didn't choose any tag
 I finally chose Create volume.
 
+![CREATE VOLUME](Images/CREATE%20VOLUME.jpg)
+
 2. Attach and mount your volume to an EC2 instance
 To attach and mount volume to an EC2 instance;
 
@@ -24,6 +26,8 @@ For Device name,The block device driver for the instance assigned a device name 
 I chose Attach volume.
 I then finally connect to the instance and mounted the volume.
 
+![AVTI](Images/ATTACHING%20VOLUME.jpg)
+
 3. Create a snapshot of your volume
 To create snapshot of my volume;
 
@@ -33,6 +37,8 @@ For Volume ID, I selected the volume from which to create the snapshot.
 For Description, I entered a brief description for the snapshot.
 I didn't choose any tag.
 I then finally chose Create snapshot.
+
+![EBS SNAPSHOOT](Images/EBS%20SNAP%20SHOT.jpg)
 
 4. Create a new volume from your snapshot
 To create new volume from the snapshot i initially created;
@@ -47,6 +53,10 @@ I didn't set any encryption for the volume.
 I didn't assign custom tags to the volume
 I then finally chose Create Volume.
 
+![VOLUME FROM SNAPSHOOT](Images/VOLUME%20RECREATED.jpg)
+
+![VOLUME FRROM SNAPSHOOT](Images/VOLUME%20FROM%20SNAPSHOT.jpg)
+
 5. Attach and mount the new volume to your EC2 instance
 To attach and mount new volume to EC2 instance;
 
@@ -57,6 +67,9 @@ For Device name, The block device driver for the instance assigned a device name
 I choose Attach volume.
 I then finally connected to the instance and mounted the volume.
 
+![VOLUME SELECTED](Images/VOLUME%20SELECTED.jpg)
+
+![NEW VOL. TO INSTANCE](Images/NEW%20VOLUME%20ATTACHED%20TO%20INSTANCE.jpg)
 
 
 
