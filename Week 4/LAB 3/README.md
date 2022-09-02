@@ -20,9 +20,50 @@ To add a tag, I chose Add tag, and then enter the tag key and value.
 Then choose Save changes.
 
 3. Launch instances in a placement group
+To launch instances in a placement group;
+
+From the EC2 console dashboard, in the Launch instance box, I chose Launch instance.
+And then chose From the EC2 console dashboard, in the Launch instance box, choose Launch instance 
+Then chose Launch instance from the options that appear. I completed the form as directed, taking care to do the following:
+Under Instance type, I selected an instance type that can be launched into a placement group.(c4 micro)
+In the Summary box, under Number of instances, I entered the total number of instances (5) that I need in this placement group.
+Under Advanced details, for Placement group name, I chose to add the instances to the placement group I created initially. 
+I then finally launched the instances.
+
 4. Describe instances in a placement group
+To describe the instance type;
+
+In the navigation pane, choose Instances.
+I selected the instance I want to describe the placement group.
+On the Details tab, under Host and placement group, I found Placement group.
+
 5. Change the placement group for an instance
+To change the placement group for an instance;
+
+
+I firstly created a new placement group as described task (1) above
+I stopped the instance i want to change its placement group using the stop-instances command.
+
+Using the AWS CLI
+I used the modify-instance-placement code input and specify the name of the placement group to which to move the instance.
+
+aws ec2 modify-instance-placement --instance-id i-0056cd8339bef8ecc --group-name NewPlacementGroup
+
+I started the instance using the start-instances command.
+
 6. Delete a placement group
+To delete the placement group;
+
+I firstly detach the instance in the placement group
+
+Then using the AWS CLI
+I used the delete-placement-group code input and specify the placement group name to delete the placement group.
+
+aws ec2 delete-placement-group --group-name JesmykelGroup
+aws ec2 delete-placement-group --group-name NewPlacementGroup
+
+
+ 
 
 
 Guide:
