@@ -34,6 +34,9 @@ Then chose Launch instance from the options that appear. I completed the form as
 Under Instance type, I selected an instance type that can be launched into a placement group.(c4 micro)
 In the Summary box, under Number of instances, I entered the total number of instances (5) that I need in this placement group.
 Under Advanced details, for Placement group name, I chose to add the instances to the placement group I created initially. 
+
+![INSTANCE IN PG](Images/Instance%20in%20placement%20group.jpg)
+
 I then finally launched the instances.
 
 ![LAUNCH INSTANCE](Images/Instance%20launched.jpg)
@@ -64,7 +67,7 @@ aws ec2 modify-instance-placement --instance-id i-0056cd8339bef8ecc --group-name
 
 I started the instance using the start-instances command.
 
-
+![MODIFY INSTANCE PG](Images/modify%20PG.jpg)
 
 6. Delete a placement group
 To delete the placement group;
