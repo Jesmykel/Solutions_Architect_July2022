@@ -2,75 +2,29 @@
 
 
 1. Create an Application Load Balancer
-I decided which two Availability Zones i will use for my EC2 instances. (us-east 1a and us-east 1b) I configured a virtual private cloud (VPC) with at least one public subnet in each of these Availability Zones. These public subnets are used to configure the load balancer. 
 
-I launched one EC2 instance in each of Availability Zone. I installed a web server. I ensured that the security groups for these instances allow HTTP access on port 80.
+To create your first load balancer, complete the following steps.
 
-Step 1: To configure target group
-I created a target group, which is used in request routing. 
+Prior to the stpes followed below, I created a vpc, with two public subnet in different avalability zone and launched an instance in this subnets.
 
-To configure your target group
+To create an Application load balancer, I use the code input
 
-In the navigation pane, under Load Balancing, I choose Target Groups.
-I choose Create target group.
-Under Basic configuration, I kept the Target type as instance.
-For Target group name, I entered a name for the new target group. 
-I Kept the default protocol (HTTP) and port (80).
-I selected the VPC containing your instances. Keep the protocol version as HTTP1.
-For Health checks, I reset the default settings.
-Then chose Next.
+aws elbv2 create-load-balancer --name ALB --subnets subnet-00ee97eda93ea291e subnet-061f6de81aeed58bf --security-groups sg-020930699674e26b5
 
-On the Register targets page, I completed the following steps. 
+I used the create-target-group command to create a target group, specifying the same VPC that I used for my EC2 instances.
 
-For Available instances, select one or more instances.
-I kept the default port 80, and choose Include as pending below.
-I then chose Create target group.
+aws elbv2 create-target-group --name ALBTG --protocol HTTP --port 80 --vpc-id vpc-05c1bfd6f69ff4740
 
-Step 2: To Choose a load balancer type
+aws elbv2 register-targets --target-group-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:targetgroup/ALBTG/3283f2d1ac65e807 --targets Id=i-02733af5d107cc2b2 Id=i-04688c1bdb7f7f4e9	
 
-To create a Application Load Balancer
+I used the create-listener command to create a listener for the load balancer with a default rule that forwards requests to the target group:
 
-On the navigation bar, I chose a Region for my load balancer. I choose the same Region that I used for your EC2 instances.
-In the navigation pane, under Load Balancing, I chose Load Balancers.
-I choose Create Load Balancer.
-For Application Load Balancer, I chose Create.
+aws elbv2 create-listener --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:loadbalancer/app/ALB/8d0026c3a4567797 --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:930031523124:targetgroup/ALBTG/3283f2d1ac65e807	
 
-Step 3: To Configure load balancer and listener
-To create an Application Load Balancer.
+To Delete your load balancer
 
-To configure load balancer and listener
-
-For Load balancer name, I entered a name for my load balancer.
-For Scheme and IP address type, I kept the default values.
-For Network mapping, I selected the VPC that I used for my EC2 instances. Selected two Availability Zones and one subnet per zone. 
-For Security groups, I kept the default. 
-For Listeners and routing, I kept the default protocol and port, and selected my target group initially created from the list. 
-For Default action, I selected the target group that I created and registered in Step 1: I configured the target group.
-I didn't Add any tag
-I reviewed the configuration, and chose Create load balancer. 
-
-Step 4: To Test load balancer
-After creating the load balancer, I verified that it's sending traffic to EC2 instances.
-
-To test your load balancer
-
-After notified that load balancer was created successfully, I chose Close.
-In the navigation pane, under Load Balancing, choose Target Groups.
-Select the newly created target group.
-Chose Targets and verified that instances are ready. 
-In the navigation pane, under Load Balancing, I choose Load Balancers.
-Selected the newly created load balancer.
-Chose Description and copy the DNS name of the load balancer (http://alb-1543995374.us-east-1.elb.amazonaws.com/). I Pasted the DNS name into the address field of an internet-connected web browser.
-
-
-Step 5: To Delete load balancer
-
-To delete your load balancer
-
-In the navigation pane, under Load Balancing, I chose Load Balancers.
-I selected the checkbox for the load balancer, chose Actions, then chose Delete.
-When prompted for confirmation, I choose Yes, Delete.
-
+aws elbv2 delete-load-balancer --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:loadbalancer/app/ALB/8d0026c3a4567797
+aws elbv2 delete-target-group --target-group-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:targetgroup/ALBTG/3283f2d1ac65e807	
 
 
 2. Create a Network Load Balancer
