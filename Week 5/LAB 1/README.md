@@ -3,7 +3,7 @@
 
 1. Create an Application Load Balancer
 
-To create your first load balancer, complete the following steps.
+To create your first load balancer, I completed the following steps.
 
 Prior to the stpes followed below, I created a vpc, with two public subnet in different avalability zone and launched an instance in this subnets.
 
@@ -29,143 +29,93 @@ aws elbv2 delete-target-group --target-group-arn arn:aws:elasticloadbalancing:us
 
 2. Create a Network Load Balancer
 
-In the navigation pane, under Load Balancing, I choose Target Groups.
-I Choose Create target group.
-I kept Target type as instance.
-For Target group name, I entered a name for the new target group.
-I kept Protocol as TCP, and Port as 80.
-I selected the VPC containing the instances. Keep the protocol version as HTTP1.
-For Health checks, I kept the default settings.
-Then, chose Next.
+To create a IPv4 Network load balancer
 
-On the Register targets page, I completed the following steps. 
+I Used the create-load-balancer command to create an IPv4 load balancer.
+ 
+aws elbv2 create-load-balancer --name NLB --type network --subnets subnet-061f6de81aeed58bf subnet-00ee97eda93ea291e 
 
-For Available instances, I select two instances.
-I kept the default port 80, and choose Include as pending below.
-I chose Create target group.
+I Used the create-target-group command to create an IPv4 target group.
 
-Step 2: To choose a load balancer type
-Elastic Load Balancing supports different types of load balancers. 
-To create a Network Load Balancer
+aws elbv2 create-target-group --name NLBTG --protocol TCP --port 80 --vpc-id vpc-05c1bfd6f69ff4740
 
-On the navigation bar, I chose a Region for load balancer. I choose the same Region that I used for the EC2 instances.
-In the navigation pane, under Load Balancing, I chose Load Balancers.
-I chose Create Load Balancer.
+I Used the register-targets command to register instances with your target group:
 
-For Network Load Balancer, I chose Create.
+aws elbv2 register-targets --target-group-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:targetgroup/NLBTG/911a4f78c98e5586 --targets Id=i-09c557a5ffc03c7b7 Id=i-03c65b2e0d2d558e6
 
-Step 3: To configure load balancer and listener
-To create a Network Load Balancer.
+I Use the create-listener command to create a listener for load balancer with a default rule that forwards requests to the target group:
 
-To configure load balancer and listener
+aws elbv2 create-listener --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:loadbalancer/net/NLB/5d2e309861502a34 --protocol TCP --port 80 --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:930031523124:targetgroup/NLBTG/911a4f78c98e5586
 
-For Load balancer name, I entered a name for the load balancer. (NLB) 
-For Scheme and IP address type, I kept the default values.
-For Network mapping, I selected the VPC that was used for your EC2 instances. For each Availability Zone that I used to launch the EC2 instances, I selected the Availability Zone and then selected one public subnet for that Availability Zone.
-For Listeners and routing, I kept the default protocol and port, and selected the target group from the list. 
-For Default action, I selected the target group that I created and registered in step 1.
-I didn't add tag to categorize your load balancer. 
-I Reviewed configuration, and choose Create load balancer. 
+To Delete load balancer
 
-Step 4:To Test load balancer
-After creating the load balancer.
+I Used the delete command to delete load balancer and target group
 
-To test load balancer
-
-After I was notified that load balancer was created successfully, I chose Close.
-In the navigation pane, under Load Balancing, I chose Target Groups.
-I Selected the newly created target group.
-Chose Targets and verify that instances are ready. 
-In the navigation pane, under Load Balancing, choose Load Balancers.
-I selected the newly created load balancer.
-I chose Description and copy the DNS name of the load balancer (http://nlb-b62036ee9bace058.elb.us-east-1.amazonaws.com/). I Pasteed the DNS name into the address field of an internet-connected web browser. 
-
-Step 5: To Delete load balancer
-
-To delete load balancer
-
-In the navigation pane, under Load Balancing, choose Load Balancers.
-I selected the load balancer and I chose Actions, Delete.
-When prompted for confirmation, I chose Yes, Delete.
+aws elbv2 delete-load-balancer --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:loadbalancer/net/NLB/5d2e309861502a34
+aws elbv2 delete-target-group --target-group-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:targetgroup/NLBTG/911a4f78c98e5586
 
 
 
 
 3. Create a Gateway Load Balancer
 
-On the navigation pane, under Load Balancing, I chose Target Groups.
-For Chose a target type.
-For Target group name, I entered a name for the target group.(GLBTG)
-The Protocol is GENEVE, and Port is 6081.
-For VPC, I selected a virtual private cloud (VPC) with the instances that I want to include in the target group.
-For Health checks, I modified the health check settings as needed.
-I didn't add Tags.
-Then, Choose Next.
+To create a Gateway Load Balancer and register targets
 
-I Added two targets as follows:
+I Used the create-load-balancer command to create a load balancer of type gateway. 
 
-I selected two instances, entered two ports, and then chose Include as pending below.
-Chose Create target group.
+aws elbv2 create-load-balancer --name GLB --type gateway --subnets subnet-00ee97eda93ea291e subnet-061f6de81aeed58bf 
 
-To create a Gateway Load Balancer
+I Used the create-target-group command to create a target group, specifying the service provider VPC in which launched instances.
 
-In the navigation pane, under Load Balancing, I chose Load Balancers.
-I Chose Create Load Balancer.
-Under Gateway Load Balancer, I chose Create.
-For Load balancer name, I entered a name for the load balancer. (GLB)
-For IP address type, I chose IPv4.
-For VPC, I selected the service provider VPC.
-For Mappings, I selected all of the Availability Zones in which I launched the instances, and the corresponding public subnets.
-For Default action, I selected a target group to forward traffic to.
-I didn't add Tags
-I reviewed configuration, and I chose Create load balancer.
+aws elbv2 create-target-group --name GLBTG --protocol GENEVE --port 6081 --vpc-id vpc-05c1bfd6f69ff4740
 
-Step 2:  To Create a Gateway Load Balancer endpoint
+I Used the register-targets command to register instances with your target group.
+
+aws elbv2 register-targets --target-group-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:targetgroup/GLBTG/0093a2fe17e11eec2a --targets Id=i-066f29230c2715908 Id=i-07ce0017e542ca9be
+
+I Used the create-listener command to create a listener for the load balancer with a default rule that forwards requests to target group.
+
+aws elbv2 create-listener --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:930031523124:loadbalancer/gwy/GLB/eafb8af4c09d8384 --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:930031523124:targetgroup/GLBTG/0093a2fe17e11eec2a
+
+
+Step 2: To Create a Gateway Load Balancer endpoint
 
 To create a Gateway Load Balancer endpoint
 
-In the navigation pane, I chose Endpoint Services.
-I chose Create Endpoint Service and do the following:
-For Associate Load Balancers, I selected the Gateway Load Balancer.
-For Require acceptance for endpoint, I selected Acceptance required to accept connection requests to your service manually. 
-I didn't add any tag. 
-I Chose Create service. I Choose the service ID. Saveed the service name from the Details tab.
-I Chose Actions, Add principals to whitelist. I Entered the ARNs of the service consumers that are allowed to create an endpoint to the service.
+I Used the create-vpc-endpoint-service-configuration command to create an endpoint service configuration using the Gateway Load Balancer.
 
-In the navigation pane, I chose Endpoints.
-I Chose Create Endpoint and did the following:
+aws ec2 create-vpc-endpoint-service-configuration --gateway-load-balancer-arns arn:aws:elasticloadbalancing:us-east-1:930031523124:loadbalancer/gwy/GLB/eafb8af4c09d8384 --no-acceptance-required
 
-For Service category, I chose Find service by name.
-For Service name, I enter the service name that I saved earlier, and then chose Verify.
-For VPC, I selected the service consumer VPC.
-For Subnets, I selected a subnet for the Gateway Load Balancer endpoint.
-I didn't add tag.
-I then, Chose Create endpoint. The initial status is pending acceptance.
+I Used the modify-vpc-endpoint-service-permissions command to allow service consumers to create an endpoint to service.
+
+aws ec2 modify-vpc-endpoint-service-permissions --service-id vpce-svc-0c1c1b7a18c28dca9 --add-allowed-principals arn:aws:iam::930031523124:root
+
+I Used the create-vpc-endpoint command to create the Gateway Load Balancer endpoint for service of each subnet
+
+aws ec2 create-vpc-endpoint --vpc-endpoint-type GatewayLoadBalancer --service-name com.amazonaws.vpce.us-east-1.vpce-svc-0c1c1b7a18c28dca9 --vpc-id vpc-05c1bfd6f69ff4740 --subnet-ids subnet-00ee97eda93ea291e 
+aws ec2 create-vpc-endpoint --vpc-endpoint-type GatewayLoadBalancer --service-name com.amazonaws.vpce.us-east-1.vpce-svc-0c1c1b7a18c28dca9 --vpc-id vpc-05c1bfd6f69ff4740 --subnet-ids subnet-061f6de81aeed58bf 
+
 
 Step 3: To Configure routing
 
 To configure routing
 
-In the navigation pane, I chose Route Tables.
-I Selected the route table for the internet gateway and did the following:
+I firstly created a route-tables (ART, LRT, EPRT)
 
-Chose Actions, I Edited routes.
-Chose Add route. For Destination, I enter the CIDR block of the subnet for the application servers. For Target, select the VPC endpoint.(Instance)
-Choose Save routes.
+I Used the create-route command to add an entry to the route table for the internet gateway that routes traffic that's destined for the application servers to the Gateway Load Balancer endpoint.
 
-Selected the route table for the subnet with the application servers and did the following:
-
-Chose Actions, Edit routes.
-Chose Add route. For Destination, enter 0.0.0.0/0. For Target, select the VPC endpoint. (Instance)
-Chose Save routes.
-
-Selected the route table for the subnet with the Gateway Load Balancer endpoint, and did the following:
-
-Choose Actions, Edit routes.
-Choose Add route. For Destination, enter 0.0.0.0/0. For Target, select the internet gateway.
-Choose Save routes.
+aws ec2 create-route --route-table-id rtb-092c97826761c1908 --destination-cidr-block 10.0.1.0/24 --vpc-endpoint-id vpce-0159ee78cec64c2dc
+aws ec2 create-route --route-table-id rtb-092c97826761c1908 --destination-cidr-block 10.0.1.0/16 --vpc-endpoint-id vpce-0b65a6dc6b27ebde0
 
 
+I Used the create-route command to add an entry to the route table for the subnet with the application servers that routes all traffic from the application servers to the Gateway Load Balancer endpoint.
+
+aws ec2 create-route --route-table-id rtb-01e7975eb9f2efee8 --destination-cidr-block 0.0.0.0/0 --vpc-endpoint-id vpce-0159ee78cec64c2dc
+aws ec2 create-route --route-table-id rtb-01e7975eb9f2efee8 --destination-cidr-block 0.0.0.0/16 --vpc-endpoint-id vpce-0b65a6dc6b27ebde0
+
+I Used the create-route command to add an entry to the route table for the subnet with the Gateway Load Balancer endpoint that routes all traffic that originated from the application servers to the internet gateway.
+
+aws ec2 create-route --route-table-id rtb-0536be44244a90ed3 --destination-cidr-block 0.0.0.0/0 --gateway-id igw-02501b6aee9069e79
 
 
 4. Create a Classic Load Balancer
@@ -254,7 +204,7 @@ I selected the new load balancer.
 On the Description tab, check the Status row. 
 After at least one of the EC2 instances is in service, I tested load balancer. Copy the string from DNS name and pasted it into the address field of an internet-connected web browser.
 
-Step 8: TO Delete load balancer
+Step 8: To Delete load balancer
 
 To delete load balancer
 
