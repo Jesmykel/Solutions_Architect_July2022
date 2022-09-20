@@ -14,7 +14,7 @@ I Left Default settings selected.
 Then Chose Create to create the table.
 
 
-2. To Write Data to a Table Using the Console or AWS CLI
+2. To Write Data to a Table Using the Console 
 
 In the navigation pane on the left side of the console, choose Tables.
 In the table list, I chose the Software table.
@@ -82,7 +82,7 @@ In the navigation pane on the left side of the console, I chose Tables.
 Chose the Software table from the table list.
 I Selected the View items.
 Chose Query.
-In the drop-down list under Query, I chose SOftware-index.
+In the drop-down list under Query, I chose Software-usage-index.
 For Softawre, entered Kali linux, and then choose Run.
 
 8. Clean Up actions
